@@ -3,6 +3,7 @@ class Prop:
         self.max_len = None
         self.min_len = None
         self.field_type = "string"
+        self.enum_values = []
         self._properties = {}
         self._items = {}
 
@@ -20,6 +21,14 @@ class Prop:
 
     def array(self):
         self.field_type = "array"
+        return self
+
+    def enum(self):
+        self.field_type = "enum"
+        return self
+
+    def values(self, enum_values):
+        self.enum_values = enum_values
         return self
 
     def properties(self, schema):
@@ -67,5 +76,9 @@ class Prop:
 
         if self.field_type == "array":
             prop["items"] = self._items
+
+        if self.field_type == "enum":
+            prop["enum"] = self.enum_values
+            del prop["type"]
 
         return prop
